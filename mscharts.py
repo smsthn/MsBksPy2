@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import *
 from tkinter.ttk import *
 from books import *
+import tkinter as tk
 
 
 
@@ -24,6 +25,8 @@ class MsCharts(Toplevel):
         self.ctgg._master = self
         self.ctgg.get_tk_widget().grid(row=1, column=0, padx=10, pady=10)
         self.ctgg.draw()
+        self.ctgdlb = tk.Listbox(self, exportselection=False)
+        self.ctgdlb.grid(row=2, column=0, padx=10, pady=10,sticky="sw")
         ttk.Separator(self,orient=VERTICAL).grid(row=1,column=0,rowspan=3,sticky="nse")
         self.rdsttsglabel = Label(self,text='ReadingStatusGraph',font=("Courier", 16,'bold'),background='white')
         self.rdsttsglabel.grid(row=0, column=1, padx=10, pady=10)
@@ -31,6 +34,14 @@ class MsCharts(Toplevel):
         self.rdsttsg._master = self
         self.rdsttsg.get_tk_widget().grid(row=1, column=1, padx=10, pady=10)
         self.rdsttsg.draw()
+        self.rdsttsdlb = tk.Listbox(self, exportselection=False)
+        self.rdsttsdlb.grid(row=2, column=1, padx=10, pady=10,sticky="se")
+
+        for i in range(0,len(catagoriesdata)):
+            self.ctgdlb.insert(tk.END,str(catagorieslegends[i])+' : ' +str(catagoriesdata[i]))
+        for i in range(0,len(readingstatusdata)):
+            self.rdsttsdlb.insert(tk.END,str(readingstatuslegends[i])+' : ' +str(readingstatusdata[i]))
+
 
 
 
@@ -40,7 +51,7 @@ class MsCharts(Toplevel):
         ax = fig.add_subplot(111)
         ax.pie(data,labels=legends, autopct='%1.1f%%',)
         
-        #fig.legend(legends)
+        fig.legend(legends)
         circle=matplotlib.patches.Circle( (0,0), 0.7, color='white')
         #ax.add_artist(circle)
         return FigureCanvasTkAgg(fig, master = self)
