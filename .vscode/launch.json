@@ -8,7 +8,7 @@
         "name": "launch main window",
         "type": "python",
         "request": "launch",
-        "program": "/home/smsthn/Documents/Py/gui/msbkspy/mainwindow.py",
+        "program": "${workspaceFolder}/mainwindow.py",
         "console": "integratedTerminal"
     },
         {

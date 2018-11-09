@@ -9,6 +9,7 @@ from configparser import ConfigParser
 import os.path
 import addwindows
 from bookdetailsframe import BookDetailsFrame
+from mscharts import MsCharts
 
 
 class mainwindow:
@@ -79,13 +80,31 @@ class mainwindow:
             self.btnframe, justify="center", text='Upload', command=self.upload)
         self.uplaodbtn.grid(row=6, column=1, padx=10, pady=10, sticky='we')
         self.btnframe.grid(row=3, column=0)
+
+        
+
+
+
         self.btnframe.columnconfigure(0, weight=1)
         self.btnframe.columnconfigure(1, weight=1)
         self.btnframe.columnconfigure(2, weight=1)
+        self.btnframe.columnconfigure(3, weight=0)
     # btnframe.place(anchor='center',)
         self.addeventlisteners()
         self.tryloadfileonstartup()
+
+
+        self.ctgchart = self.makeCtgChart()
+        self.ctgchart.get_tk_widget().grid(row=1, column=3, padx=30, pady=10, sticky='nw')
+        self.ctgchart.draw()
+        self.rdsttschart = self.makeRdSttsChart()
+        self.rdsttschart.get_tk_widget().grid(row=3, column=3, padx=30, pady=10, sticky='nw')
+        self.rdsttschart.draw()
+
+
         self.root.mainloop()
+
+    
 
     def addeventlisteners(self):
         self.ctglb.bind("<<ListboxSelect>>", self.catagoryselectedevent)
@@ -290,6 +309,29 @@ class mainwindow:
         self.bkslb.delete(0, tk.END)
         for book in self.books.AllBooks:
             self.bkslb.insert(tk.END, book.Name)
+
+    def makeCtgChart(self):
+        legends = self.books.AllCatagories
+        data = []
+        index = -1
+        for ctg in self.books.AllCatagories:
+            data.append(0)
+            index += 1
+            for book in self.books.AllBooks:
+                if book.Catagory == ctg:
+                    data[index] += 1
+        return MsCharts.makePie(self.root,data,legends)
+    def makeRdSttsChart(self):
+        legends = self.books.AllReadingStatus
+        data = []
+        index = -1
+        for rdstts in self.books.AllReadingStatus:
+            data.append(0)
+            index += 1
+            for book in self.books.AllBooks:
+                if book.ReadingStatus == rdstts:
+                    data[index] += 1
+        return MsCharts.makePie(self.root,data,legends)
 
 
 window = mainwindow()
