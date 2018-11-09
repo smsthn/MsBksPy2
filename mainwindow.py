@@ -81,6 +81,9 @@ class mainwindow:
         self.uplaodbtn.grid(row=6, column=1, padx=10, pady=10, sticky='we')
         self.btnframe.grid(row=3, column=0)
 
+        self.statsbtn = tk.Button(self.root,justify='center',text='Statistics',command=self.openstatswindow)
+        self.statsbtn.grid(row=2 , column=0 )
+
         
 
 
@@ -88,18 +91,11 @@ class mainwindow:
         self.btnframe.columnconfigure(0, weight=1)
         self.btnframe.columnconfigure(1, weight=1)
         self.btnframe.columnconfigure(2, weight=1)
-        self.btnframe.columnconfigure(3, weight=0)
     # btnframe.place(anchor='center',)
         self.addeventlisteners()
         self.tryloadfileonstartup()
 
 
-        self.ctgchart = self.makeCtgChart()
-        self.ctgchart.get_tk_widget().grid(row=1, column=3, padx=30, pady=10, sticky='nw')
-        self.ctgchart.draw()
-        self.rdsttschart = self.makeRdSttsChart()
-        self.rdsttschart.get_tk_widget().grid(row=3, column=3, padx=30, pady=10, sticky='nw')
-        self.rdsttschart.draw()
 
 
         self.root.mainloop()
@@ -320,7 +316,7 @@ class mainwindow:
             for book in self.books.AllBooks:
                 if book.Catagory == ctg:
                     data[index] += 1
-        return MsCharts.makePie(self.root,data,legends)
+        return data,legends
     def makeRdSttsChart(self):
         legends = self.books.AllReadingStatus
         data = []
@@ -331,7 +327,12 @@ class mainwindow:
             for book in self.books.AllBooks:
                 if book.ReadingStatus == rdstts:
                     data[index] += 1
-        return MsCharts.makePie(self.root,data,legends)
+        return data,legends
+    
+    def openstatswindow(self):
+        ctgd, ctgl = self.makeCtgChart()
+        rdsttsd, rdsttsl = self.makeRdSttsChart()
+        MsCharts(self.root,self,"Books Stats", ctgd,ctgl,rdsttsd,rdsttsl)
 
 
 window = mainwindow()
